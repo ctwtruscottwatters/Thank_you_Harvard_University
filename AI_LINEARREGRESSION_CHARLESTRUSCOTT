@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Nov 25 06:52:54 2022
+
+@author: truscottwatters
+"""
+
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy.stats as ss
+import random 
+import pandas as pd
+def main():
+    random.seed(1)
+    x = np.array(range(0, 101))
+    y = 13 * x + 6
+    y_also = ss.uniform.rvs(0, 1, size=101)
+    y_also += y + ss.norm.rvs(0, 5, size=101)
+    print("x: {}, y: {}, y_also: {}".format(x, y, y_also))
+    plt.figure(0, dpi=300, figsize=[10, 5])
+    plt.title("Charles Truscott after HarvardX working on Artificial Intelligence in Python")
+    plt.plot(x, y, color='black', label="Linearly increasing function 13 * x + 6")
+    plt.scatter(x, y_also, color='red', label="Scattered data of linearly increasing function with error")
+    plt.legend()
+    linearfunction = pd.DataFrame({"x": x, "y": y})
+    X = linearfunction.iloc[:,:-1].values
+    Y = linearfunction.iloc[:,-1].values
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=1/3, random_state=0)
+    regressor = LinearRegression()
+    regressor.fit(X_train, Y_train)
+    plt.scatter(X_train, regressor.predict(X_train), color="purple", label="Artificial Intelligence (regression rather) prediction of the linearly increasing function")
+    plt.legend()
+    plt.show()
+
+if __name__ == "__main__": main()
